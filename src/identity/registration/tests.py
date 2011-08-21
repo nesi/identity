@@ -6,6 +6,7 @@ Replace these with more appropriate tests for your application.
 """
 
 from django.test import TestCase
+import identity.registration as registration
 
 class SimpleTest(TestCase):
     def test_basic_addition(self):

@@ -3,6 +3,7 @@
 	<name>identity</name>
 	<comment></comment>
 	<projects>
+		<project>voms-admin</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

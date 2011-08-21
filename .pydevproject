@@ -13,4 +13,8 @@
 <pydev_pathproperty name="org.python.pydev.PROJECT_SOURCE_PATH">
 <path>/identity/src</path>
 </pydev_pathproperty>
+<pydev_pathproperty name="org.python.pydev.PROJECT_EXTERNAL_SOURCE_PATH">
+<path>/home/yhal003/projects/voms-admin</path>
+<path>/home/yhal003/projects/voms-admin/VOMSAdmin</path>
+</pydev_pathproperty>
 </pydev_project>
