@@ -8,7 +8,7 @@ try:
     from email.mime.text import MIMEText
 # support python 2.4
 except ImportError:
-    from email import MIMEText
+    from email.MIMEText import MIMEText
 
 class DummyMailSender(object):
     def __init__(self):
