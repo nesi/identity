@@ -8,7 +8,7 @@ from django.template import RequestContext
 import identity.auth as auth
 import identity.registration.shib as shib
 import identity.regemail as email
-from identity.registration.VomsConnector import VomsConnector
+from identity.registration.voms import VomsConnector
 from identity.registration.models import NeSIUser,Request, Project
 
 from django import forms
