@@ -7,6 +7,15 @@ Created on 21/08/2011
 def getAuth(request):
     return Auth()
 
+class ShibAuth(object):
+    def __init__(self, request):
+        self.token = request.META["shared-token"]
+        self.provider = request.META["Shib-Identity-Provider"]
+        self.cn = request.META["cn"]
+        self.username = request.META["REMOTE_USER"]
+        self.email = request.META["mail"]
+
+
 class Auth(object):
     '''
     classdocs
