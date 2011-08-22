@@ -7,15 +7,21 @@ from django.template import RequestContext
 
 import identity.auth as auth
 import identity.registration.shib as shib
+import identity.regemail as email
 from identity.registration.VomsConnector import VomsConnector
-from identity.registration.models import NeSIUser,Request
+from identity.registration.models import NeSIUser,Request, Project
 
 from django import forms
 
 class RequestForm(forms.Form):
-    message = forms.CharField(widget=forms.Textarea)
+    email = forms.CharField()
+    phone = forms.CharField()
+    message = forms.CharField(widget=forms.Textarea, label="Message to BeSTGRID Demiurges")
+    
+def registration_resubmit(request):
+    return registration(request, True)
 
-def registration(request):
+def registration(request, resubmit=False):
     a = auth.getAuth(request)
     print a.cn
     if (a.cn == None or a.provider == None or a.token == None):
@@ -36,22 +42,34 @@ def registration(request):
         return HttpResponse(status=401)
     
     requestSubmitted = False
-    qr = Request.objects.filter(user=q[0].id)
-    if (qr.count() > 1):
+    qr = Request.objects.filter(user=q[0])
+    if (qr.count() > 1 and not resubmit ):
         r = qr[0]
         requestSubmitted = True
+    elif ((qr.count() > 1) and resubmit):
+        r = qr[0]
+        r.delete()
+        requestSubmitted = False
     elif request.method == 'POST':
-        r = Request(user = q[0].id, message = request.POST["message"])
+        r = Request(user = q[0], message = request.POST["message"])
+        groupsToApply =  request.POST.getlist("apply_group")
+        message = "I would like to apply for the following groups: " + ",".join(groupsToApply)
+        email.MailSender().send(message)
         r.save()
         requestSubmitted = True
         
     userGroups = v.listGroups(userDN, shib.SLCS_CA)
-    nonUserGroups = []
+    
+    nonUserGroups = {}
     for g in groups:
         try:
             userGroups.index(g)
         except ValueError:
-            nonUserGroups.append(g)
+            pq = Project.objects.filter(vo=g)
+            if (pq.count() > 0):
+                nonUserGroups[g] = pq[0].label
+            else:
+                nonUserGroups[g] = g
     print groups
     return render_to_response("reg.html", 
                               {"dn": a.cn, 

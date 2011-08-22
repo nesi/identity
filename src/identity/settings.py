@@ -1,4 +1,5 @@
-from identity.auth import Auth
+import identity.auth
+import identity.regemail
 
 import os
 PROJECT_PATH = os.path.abspath(os.path.dirname(__file__))
@@ -79,6 +80,9 @@ TEMPLATE_DIRS = (
 
 #def getAuth(request):
 #    return Auth()
+
+identity.auth.getAuth = lambda r: identity.auth.Auth2()
+identity.regemail.MailSender = identity.regemail.DummyMailSender
 
 VOMS_CERTIFICATE="/home/yhal003/projects/certificates/test_cert.pem"
 VOMS_KEY="/home/yhal003/projects/certificates/test_key.pem"

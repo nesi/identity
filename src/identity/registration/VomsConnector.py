@@ -22,6 +22,9 @@ class VomsConnector(object):
         if (dn == None):
             return self.voms.admin.listGroups()
         else:
-            return self.voms.admin.listUserGroups(dn, ca)
+            try:
+                return self.voms.admin.listUserGroups(dn, ca)
+            except Exception:
+                return []
     
         

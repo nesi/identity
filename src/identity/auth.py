@@ -16,6 +16,14 @@ class ShibAuth(object):
         self.email = request.META["mail"]
 
 
+class Auth2(object):
+    def __init__(self):
+        self.provider ="https://idp.auckland.ac.nz/idp/shibboleth"
+        self.cn = "Nick Jones"
+        self.username = "njon001@auckland.ac.nz"
+        self.token = "Y7rpGFpSV8z7TRK288wcQo9Eo_M"
+        self.email = "njon001@aucklanduni.ac.nz"
+
 class Auth(object):
     '''
     classdocs

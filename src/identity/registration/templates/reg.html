@@ -1,5 +1,26 @@
 {% extends "base.html" %}
 
+{% block head %}
+<script type="text/javascript">
+
+function display(action, id, link)
+{
+if (action == 'show')
+{
+document.getElementById(id).style.display = "block";
+document.getElementById(link).style.display = "none";
+}
+
+if (action == 'hide')
+{
+document.getElementById(id).style.display = "none";
+document.getElementById(link).style.display = "block";
+}
+}
+
+</script>
+{% endblock %}
+
 {% block content %}
 
 <br/>
@@ -14,16 +35,24 @@
  {% endfor %}
  </p>
 
+{% if requestSubmitted %}
+ 	<font color='green'>Your Request For Membership Has Been Submitted. Click 
+ 	<a href="/resubmit/">here</a> to re-submit. 
+ 	</font>
+{% else %}
+<form action="/registration/" method="post">
+<a id="showlink" href="javascript:display('show', 'group_selection','showlink')">Select Groups (Click to Expand)</a>
+<div id="group_selection" style="display:none;">
+<a href="javascript:display('hide', 'group_selection','showlink')">Select Groups (Hide)</a>
 <p> You can apply for the following groups: </p>
 
-{% for g in groups %}
-	<p>{{g}}</p>
+<div class="form-field">
+{% for g,l in groups.items %}
+	<input type="checkbox" name="apply_group" value="{{g}}" />
+	<label for="{{g}}">{{l}}</label>
 {% endfor %}
-
-{% if requestSubmitted %}
- 	<font color='green'>Your Request For Membership Has Been Submitted</font>
-{% else %}
-<form action="/create_request/" method="post">
+</div>
+</div>
 {{ form.as_p }}
 <input type="submit" value="Submit Membership Request" />
 </form>

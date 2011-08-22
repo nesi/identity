@@ -3,9 +3,9 @@ from django.db import models
 # Create your models here.
 
 class NeSIUser(models.Model):
-    username = models.CharField(max_length=20)
+    username = models.CharField(max_length=100)
     token = models.CharField(max_length=30)
-    provider = models.CharField(max_length=30)
+    provider = models.CharField(max_length=100)
     email = models.CharField(max_length=30)
     def qualifiedName(self):
         return self.username  + "@" + self.provider
