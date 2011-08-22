@@ -7,7 +7,7 @@ import VOMSCommands
 
 class VomsConnector(object):
     '''
-    classdocs
+    used to connect to VOMS server
     '''
 
 
@@ -17,5 +17,11 @@ class VomsConnector(object):
                                                  user_cert="/home/yhal003/projects/certificates/test_cert.pem",
                                                  user_key="/home/yhal003/projects/certificates/test_key.pem",
                                                  vo="/nz");
-        
+    
+    def listGroups(self, dn=None, ca=None):
+        if (dn == None):
+            return self.voms.admin.listGroups()
+        else:
+            return self.voms.admin.listUserGroups(dn, ca)
+    
         

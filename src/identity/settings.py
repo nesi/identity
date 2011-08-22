@@ -1,4 +1,4 @@
-from identity.Auth import Auth
+from identity.auth import Auth
 
 import os
 PROJECT_PATH = os.path.abspath(os.path.dirname(__file__))
@@ -70,20 +70,21 @@ MIDDLEWARE_CLASSES = (
 ROOT_URLCONF = 'identity.urls'
 
 TEMPLATE_DIRS = (
-                 os.path.join(PROJECT_PATH, 'templates'),
+                 os.path.join(PROJECT_PATH,'registration/templates'),
+                 os.path.join(PROJECT_PATH, 'registration'),
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
 )
 
-def getAuth(request):
-    return Auth()
+#def getAuth(request):
+#    return Auth()
 
 VOMS_CERTIFICATE="/home/yhal003/projects/certificates/test_cert.pem"
 VOMS_KEY="/home/yhal003/projects/certificates/test_key.pem"
 
 INSTALLED_APPS = (
-    'django.contrib.auth',
+    #'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.sites',

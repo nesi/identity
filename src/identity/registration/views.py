@@ -5,8 +5,70 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.core.urlresolvers import reverse
 from django.template import RequestContext
 
-import identity.settings as settings
+import identity.auth as auth
+import identity.registration.shib as shib
+from identity.registration.VomsConnector import VomsConnector
+from identity.registration.models import NeSIUser,Request
+
+from django import forms
+
+class RequestForm(forms.Form):
+    message = forms.CharField(widget=forms.Textarea)
 
 def registration(request):
-    auth = settings.getAuth(request)
-    return render_to_response("registration/reg.html", {"auth": auth})
+    a = auth.getAuth(request)
+    print a.cn
+    if (a.cn == None or a.provider == None or a.token == None):
+        return HttpResponse(status=401)
+    
+    v = VomsConnector()
+    groups = v.listGroups()
+    try:
+        userDN = shib.shib2dn(shib.getACL(), a.cn, a.token, a.provider)
+        # create user if does not exist
+        q = NeSIUser.objects.filter(username = a.username, provider= a.provider)
+        if (q.count() < 1):
+            u = NeSIUser(username=a.username, provider = a.provider, email = a.email, token = a.token)
+            u.save()
+        else:
+            u = q[0]
+    except shib.SlcsUserNotFoundException:
+        return HttpResponse(status=401)
+    
+    requestSubmitted = False
+    qr = Request.objects.filter(user=q[0].id)
+    if (qr.count() > 1):
+        r = qr[0]
+        requestSubmitted = True
+    elif request.method == 'POST':
+        r = Request(user = q[0].id, message = request.POST["message"])
+        r.save()
+        requestSubmitted = True
+        
+    userGroups = v.listGroups(userDN, shib.SLCS_CA)
+    nonUserGroups = []
+    for g in groups:
+        try:
+            userGroups.index(g)
+        except ValueError:
+            nonUserGroups.append(g)
+    print groups
+    return render_to_response("reg.html", 
+                              {"dn": a.cn, 
+                               "groups": nonUserGroups, 
+                               "userGroups": userGroups,
+                               "requestSubmitted": requestSubmitted,
+                               "form": RequestForm()})
+
+def create_request(request):
+    a = auth.getAuth(request)
+    if (a.cn == None or a.provider == None or a.token == None):
+        return HttpResponse(status=401)
+    q = NeSIUser.objects.filter(username = a.username, provider= a.provider)
+    if (q.count() < 1):
+        return HttpResponse(status=401)
+    else:
+        u = q[0]
+    r = Request(user = q[0].id, message = request.POST["message"])
+    r.save()
+    return render_to_response("request.html")

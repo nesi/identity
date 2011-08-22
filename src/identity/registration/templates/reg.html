@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<br/>
+<br/>
+<br/>
+
+<p>Welcome <b>{{dn}}</b>! 
+
+<p> You are a member of the following groups:
+ {% for g in userGroups %}
+  <b>{{g}},</b>
+ {% endfor %}
+ </p>
+
+<p> You can apply for the following groups: </p>
+
+{% for g in groups %}
+	<p>{{g}}</p>
+{% endfor %}
+
+{% if requestSubmitted %}
+ 	<font color='green'>Your Request For Membership Has Been Submitted</font>
+{% else %}
+<form action="/create_request/" method="post">
+{{ form.as_p }}
+<input type="submit" value="Submit Membership Request" />
+</form>
+{% endif %}
+
+{% endblock %}

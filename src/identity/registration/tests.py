@@ -6,19 +6,145 @@ Replace these with more appropriate tests for your application.
 """
 
 from django.test import TestCase
-import identity.registration as registration
+from django.test.client import Client
+
+from identity.registration.models import Project,NeSIUser, Request
+from identity.registration.shib import ShibUser,ShibException,shib2dn,SlcsUserNotFoundException
+
+import identity.auth
+
+class BrokenAuth:
+    def __init__(self):
+        self.provider = None
+        self.cn = None
+        self.token = None
+        self.email = None
+
+class StaticAuth:
+    def __init__(self):
+        self.provider = "https://idp.auckland.ac.nz/idp/shibboleth"
+        self.cn = "Yuriy Halytskyy"
+        self.token = "iibLJCBQh9f3BJQ-zIaI3uvl4Yc"
+        self.username = "yhal003"
+        self.email = "y@halytskyy"
+        
+class WrongIDPAuth:
+    def __init__(self):
+        self.provider = "https://wrong-idp"
+        self.cn = "Yuriy Halytskyy"
+        self.token = "iibLJCBQh9f3BJQ-zIaI3uvl4Yc"
+        self.username ="yhal003"
+        self.email = "y@halytskyy"
+    
+class ShibTest(TestCase):
+    
+    simpleACL = """
+https://idp.canterbury.ac.nz/idp/shibboleth, /DC=nz/DC=org/DC=bestgrid/DC=slcs/O=University of Canterbury
+"""
+
+    complexACL = """
+https://idp.canterbury.ac.nz/idp/shibboleth, /DC=nz/DC=org/DC=bestgrid/DC=slcs/O=University of Canterbury
+https://idp.lincoln.ac.nz/idp/shibboleth, /DC=nz/DC=org/DC=bestgrid/DC=slcs/O=Lincoln University
+https://idp.auckland.ac.nz/idp/shibboleth, /DC=nz/DC=org/DC=bestgrid/DC=slcs/O=The University of Auckland
+"""
+
+    nullACL = None
+
+    canterburyDn = "/DC=nz/DC=org/DC=bestgrid/DC=slcs/O=University of Canterbury"
+    canterburyIdp = "https://idp.canterbury.ac.nz/idp/shibboleth"
+    aucklandDn = "/DC=nz/DC=org/DC=bestgrid/DC=slcs/O=The University of Auckland"
+    aucklandIdp = "https://idp.auckland.ac.nz/idp/shibboleth"
+
+    def testSimpleACL(self):
+        cn = "First Second"
+        token = "abc"
+        dn = shib2dn(self.simpleACL, token = token, cn = cn, idp = self.canterburyIdp)
+        self.assertEqual(dn, self.canterburyDn + "/CN=" + cn + " " + token)
+        
+    def testComplexACL(self):
+        cn = "Name1 Name2"
+        token = "xyz"
+        dn = shib2dn(self.complexACL, cn = cn, token = token, idp = self.aucklandIdp)
+        self.assertEqual(dn, self.aucklandDn + "/CN=" + cn + " " + token)
+        
+    def testNullACL(self):
+        cn = "Name1 Name2"
+        token = "xyz"
+        self.assertRaises(ShibException, shib2dn, 
+                          self.nullACL,cn, token,self.aucklandIdp)
+    
+    def testNullName(self):
+        cn = None
+        token = "xyz"
+        self.assertRaises(ShibException, shib2dn, 
+                          self.simpleACL,cn, token,self.aucklandIdp)
+        
+    def testNullToken(self):
+        cn = "Name1 Name2"
+        token = None
+        self.assertRaises(ShibException, shib2dn, 
+                          self.simpleACL,cn, token,self.aucklandIdp)
+    
+    def testNotFound(self):
+        cn = "Name1 Name2"
+        token = "xyz"
+        self.assertRaises(SlcsUserNotFoundException, shib2dn, 
+                          self.simpleACL,cn, token,self.aucklandIdp)
+        
+    
+    def testViewRegStatic(self):
+        client = Client()
+        identity.auth.getAuth = lambda r: StaticAuth()
+        response = client.get("/registration/")
+        self.assertEqual(response.status_code,200)
+    
+
+    def testViewBrokenLogin(self):
+        client = Client()
+        identity.auth.getAuth = lambda r: BrokenAuth()
+        response = client.get("/registration/")
+        self.assertEqual(response.status_code,401)
+        
+    def testWrongIdpLogin(self):
+        client = Client()
+        identity.auth.getAuth = lambda r: WrongIDPAuth()
+        response = client.get("/registration/")
+        self.assertEqual(response.status_code,401)
+    
+    def testUserCreation(self):
+        client = Client()
+        sauth = StaticAuth()
+        identity.auth.getAuth = lambda r: StaticAuth()
+        # user does not exist before registration
+        q = NeSIUser.objects.filter(username = sauth.username, provider= sauth.provider)
+        self.assertEqual(q.count(), 0)
+        response = client.get("/registration/")
+        q = NeSIUser.objects.filter(username = sauth.username, provider= sauth.provider)
+        self.assertEqual(q.count(), 1)
+    
+    def testCreateRequest(self):
+        client = Client()
+        sauth = StaticAuth()
+        message = "Please assign me to /ARCS/BeSTGIRD"
+        identity.auth.getAuth = lambda r: StaticAuth()
+        response = client.get("/registration/")
+        q = NeSIUser.objects.filter(username = sauth.username, provider= sauth.provider)
+        id = q[0].id
+        response = client.post("/create_request/", {"message" : message})
+        q = Request.objects.filter(user = id, message = message)
+        self.assertEqual(q.count(), 1)
+        self.assertEqual(q[0].message, message)
+        
 
 class SimpleTest(TestCase):
-    def test_basic_addition(self):
-        """
-        Tests that 1 + 1 always equals 2.
-        """
-        self.failUnlessEqual(1 + 1, 2)
-
-__test__ = {"doctest": """
-Another way to test that 1 + 1 is equal to 2.
-
->>> 1 + 1 == 2
-True
-"""}
+    def setUp(self):
+        u1 = NeSIUser(username="yhal003", 
+                      token="abz",
+                      provider="https://idp.auckland.ac.nz/idp/shibboleth",
+                      email="y@email")
+        u1.save()
+        
+    def tearDown(self):
+        pass
+        
 
