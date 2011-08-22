@@ -4,7 +4,11 @@ Created on 22/08/2011
 @author: yhal003
 '''
 import smtplib
-from email.mime.text import MIMEText
+try:
+    from email.mime.text import MIMEText
+# support python 2.4
+except ImportError:
+    from email import MIMEText
 
 class DummyMailSender(object):
     def __init__(self):
