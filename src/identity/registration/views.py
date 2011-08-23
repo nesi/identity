@@ -25,9 +25,8 @@ def registration_resubmit(request):
 def registration(request, resubmit=False):
     a = auth.getAuth(request)
     form = RequestForm()
-    print a.cn
     if (a.cn == None or a.provider == None or a.token == None):
-        return HttpResponse(status=401)
+        return HttpResponse(status=403)
     
     v = VomsConnector()
     groups = v.listGroups()
@@ -41,7 +40,7 @@ def registration(request, resubmit=False):
         else:
             u = q[0]
     except shib.SlcsUserNotFoundException:
-        return HttpResponse(status=401)
+        return HttpResponse(status=403)
     
     requestSubmitted = False
     qr = Request.objects.filter(user=q[0])

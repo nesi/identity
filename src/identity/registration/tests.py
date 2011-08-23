@@ -104,13 +104,13 @@ https://idp.auckland.ac.nz/idp/shibboleth, /DC=nz/DC=org/DC=bestgrid/DC=slcs/O=T
         client = Client()
         identity.auth.getAuth = lambda r: BrokenAuth()
         response = client.get("/registration/")
-        self.assertEqual(response.status_code,401)
+        self.assertEqual(response.status_code,403)
         
     def testWrongIdpLogin(self):
         client = Client()
         identity.auth.getAuth = lambda r: WrongIDPAuth()
         response = client.get("/registration/")
-        self.assertEqual(response.status_code,401)
+        self.assertEqual(response.status_code,403)
     
     def testUserCreation(self):
         client = Client()
