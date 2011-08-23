@@ -62,7 +62,7 @@ def registration(request, resubmit=False):
             message = "DN is " + userDN + "\n"
             message += "email is " + request.POST["email"] + "\n"
             message += "phone is " + request.POST["phone"] + "\n"
-            message += "I would like to apply for the following groups: " + ",".join([x[0] for x in groupsToApply]) + "\n"
+            message += "I would like to apply for the following groups: " + ",".join([x for x in groupsToApply]) + "\n"
             message += request.POST["message"]
             email.MailSender().send(message)
             r.save()
