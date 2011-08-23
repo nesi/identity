@@ -40,10 +40,12 @@ document.getElementById(link).style.display = "block";
 <a href="javascript:display('hide', 'group_selection','showlink')">Select Groups (Hide)</a>
 <p>You can apply for the following groups:</p>
 <div class="form-field">
-{% for g,l in groups.items %}
+<div style="overflow: auto; height: 300px; width: 600px">
+{% for g in groups %}
 	<input type="checkbox" name="apply_group" value="{{g}}" />
-	<label for="{{g}}">{{l}}</label>
+	<label for="{{g.0}}">{{g.1}}</label>
 {% endfor %}
+</div>
 </div>
 </div>
 {{ form.as_p }}

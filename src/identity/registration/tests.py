@@ -10,6 +10,7 @@ from django.test.client import Client
 
 from identity.registration.models import Project,NeSIUser, Request
 from identity.registration.shib import ShibUser,ShibException,shib2dn,SlcsUserNotFoundException
+from identity.registration.views import RequestForm
 
 import identity.auth
 
@@ -125,15 +126,17 @@ https://idp.auckland.ac.nz/idp/shibboleth, /DC=nz/DC=org/DC=bestgrid/DC=slcs/O=T
     def testCreateRequest(self):
         client = Client()
         sauth = StaticAuth()
+        form = RequestForm()
+        form.email = "y.halytskyy@gmail.com"
+        form.message = "message"
+        form.phone = "234234"
         message = "Please assign me to /ARCS/BeSTGIRD"
         identity.auth.getAuth = lambda r: StaticAuth()
         response = client.get("/registration/")
         q = NeSIUser.objects.filter(username = sauth.username, provider= sauth.provider)
-        id = q[0].id
-        response = client.post("/create_request/", {"message" : message})
-        q = Request.objects.filter(user = id, message = message)
+        response = client.post("/registration/", {"message": form.message, "email": form.email, "phone": form.phone})
+        q = Request.objects.filter(user = q[0])
         self.assertEqual(q.count(), 1)
-        self.assertEqual(q[0].message, message)
         
 
 class SimpleTest(TestCase):

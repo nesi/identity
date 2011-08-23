@@ -14,15 +14,17 @@ from identity.registration.models import NeSIUser,Request, Project
 from django import forms
 
 class RequestForm(forms.Form):
-    email = forms.CharField()
-    phone = forms.CharField()
-    message = forms.CharField(widget=forms.Textarea, label="Message to BeSTGRID Demiurges")
+    error_css_class = 'error'
+    email = forms.EmailField(required=True)
+    phone = forms.CharField(required=True)
+    message = forms.CharField(widget=forms.Textarea, label="Message to BeSTGRID Demiurges",required=True)
     
 def registration_resubmit(request):
     return registration(request, True)
 
 def registration(request, resubmit=False):
     a = auth.getAuth(request)
+    form = RequestForm()
     print a.cn
     if (a.cn == None or a.provider == None or a.token == None):
         return HttpResponse(status=401)
@@ -51,32 +53,42 @@ def registration(request, resubmit=False):
         r.delete()
         requestSubmitted = False
     elif request.method == 'POST':
-        r = Request(user = q[0], message = request.POST["message"])
-        groupsToApply =  request.POST.getlist("apply_group")
-        message = "I would like to apply for the following groups: " + ",".join(groupsToApply)
-        email.MailSender().send(message)
-        r.save()
-        requestSubmitted = True
+        form = RequestForm(request.POST)
+        if (not form.is_valid()):
+            pass
+        else:
+            r = Request(user = q[0], message = request.POST["message"])
+            groupsToApply =  request.POST.getlist("apply_group")
+            message = "DN is " + userDN + "\n"
+            message += "email is " + request.POST["email"] + "\n"
+            message += "phone is " + request.POST["phone"] + "\n"
+            message += "I would like to apply for the following groups: " + ",".join([x[0] for x in groupsToApply]) + "\n"
+            message += request.POST["message"]
+            email.MailSender().send(message)
+            r.save()
+            requestSubmitted = True
         
     userGroups = v.listGroups(userDN, shib.SLCS_CA)
     
-    nonUserGroups = {}
+    nonUserGroups = []
     for g in groups:
         try:
             userGroups.index(g)
         except ValueError:
             pq = Project.objects.filter(vo=g)
+            if ( not (g.startswith("/nz/uoa/") or (g.startswith("/nz/virtual-screening")))):
+                continue
             if (pq.count() > 0):
-                nonUserGroups[g] = pq[0].label
+                nonUserGroups.append((g,pq[0].label))
             else:
-                nonUserGroups[g] = g
-    print groups
+                nonUserGroups.append((g,g))
+    nonUserGroups.sort(lambda a,b: cmp(a[0],b[0]))
     return render_to_response("reg.html", 
                               {"dn": a.cn, 
                                "groups": nonUserGroups, 
                                "userGroups": userGroups,
                                "requestSubmitted": requestSubmitted,
-                               "form": RequestForm()})
+                               "form": form})
 
 def create_request(request):
     a = auth.getAuth(request)
