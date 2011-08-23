@@ -23,29 +23,22 @@ document.getElementById(link).style.display = "block";
 
 {% block content %}
 
-<br/>
-<br/>
-<br/>
-
-<p>Welcome <b>{{dn}}</b>! 
-
-<p> You are a member of the following groups:
- {% for g in userGroups %}
-  <b>{{g}},</b>
- {% endfor %}
- </p>
+<p>Welcome <b>{{dn}}</b>!</p>
 
 {% if requestSubmitted %}
- 	<font color='green'>Your Request For Membership Has Been Submitted. Click 
- 	<a href="/resubmit/">here</a> to re-submit. 
- 	</font>
+<p><font color='green'>Your request for group membership has been submitted. Click <a href="/resubmit/">here</a> to re-submit.</font></p>
 {% else %}
+<p> You are a member of the following groups:
+<ul>
+ {% for g in userGroups %}
+  <li>{{g}}</li>
+ {% endfor %}
+</ul>
 <form action="/registration/" method="post">
 <a id="showlink" href="javascript:display('show', 'group_selection','showlink')">Select Groups (Click to Expand)</a>
 <div id="group_selection" style="display:none;">
 <a href="javascript:display('hide', 'group_selection','showlink')">Select Groups (Hide)</a>
-<p> You can apply for the following groups: </p>
-
+<p>You can apply for the following groups:</p>
 <div class="form-field">
 {% for g,l in groups.items %}
 	<input type="checkbox" name="apply_group" value="{{g}}" />
@@ -56,6 +49,7 @@ document.getElementById(link).style.display = "block";
 {{ form.as_p }}
 <input type="submit" value="Submit Membership Request" />
 </form>
+</p>
 {% endif %}
 
 {% endblock %}
