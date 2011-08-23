@@ -42,7 +42,7 @@ document.getElementById(link).style.display = "block";
 <div class="form-field">
 <div style="overflow: auto; height: 300px; width: 600px">
 {% for g in groups %}
-	<input type="checkbox" name="apply_group" value="{{g}}" />
+	<input type="checkbox" name="apply_group" value="{{g.0}}" />
 	<label for="{{g.0}}">{{g.1}}</label>
 {% endfor %}
 </div>

@@ -134,7 +134,8 @@ https://idp.auckland.ac.nz/idp/shibboleth, /DC=nz/DC=org/DC=bestgrid/DC=slcs/O=T
         identity.auth.getAuth = lambda r: StaticAuth()
         response = client.get("/registration/")
         q = NeSIUser.objects.filter(username = sauth.username, provider= sauth.provider)
-        response = client.post("/registration/", {"message": form.message, "email": form.email, "phone": form.phone})
+        response = client.post("/registration/", {"message": form.message, "email": form.email, "phone": form.phone, 
+                                                  "apply_group": ["g1","g2"]})
         q = Request.objects.filter(user = q[0])
         self.assertEqual(q.count(), 1)
         
