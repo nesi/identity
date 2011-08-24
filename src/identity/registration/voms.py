@@ -26,7 +26,6 @@ class VomsConnector(object):
                                                  user_cert=VOMS_CERTIFICATE,
                                                  user_key=VOMS_KEY,
                                                  vo=VOMS_VO);
-    
     def listGroups(self, dn=None, ca=None):
         if (dn == None):
             return self.voms.admin.listGroups()

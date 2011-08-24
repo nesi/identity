@@ -7,7 +7,7 @@ from django.template import RequestContext
 
 import identity.auth as auth
 import identity.registration.shib as shib
-import identity.regemail as email
+import identity.regemail as regemail
 from identity.registration.voms import VomsConnector
 from identity.registration.models import NeSIUser,Request, Project
 
@@ -15,9 +15,10 @@ from django import forms
 
 class RequestForm(forms.Form):
     error_css_class = 'error'
-    email = forms.EmailField(required=True)
-    phone = forms.CharField(required=True)
-    message = forms.CharField(widget=forms.Textarea, label="Message to BeSTGRID Demiurges",required=True)
+    email = forms.EmailField(required=True, widget = forms.TextInput(attrs={'size': 40}))
+    phone = forms.CharField(required=True,  widget = forms.TextInput(attrs={'size': 40}))
+    message = forms.CharField(widget=forms.Textarea  ,required=True)
+    groups = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple(), required=False)
     
 def registration_resubmit(request):
     return registration(request, True)
@@ -30,6 +31,7 @@ def registration(request, resubmit=False):
     
     v = VomsConnector()
     groups = v.listGroups()
+    
     try:
         userDN = shib.shib2dn(shib.getACL(), a.cn, a.token, a.provider)
         # create user if does not exist
@@ -42,33 +44,7 @@ def registration(request, resubmit=False):
     except shib.SlcsUserNotFoundException:
         return HttpResponse(status=403)
     
-    requestSubmitted = False
-    qr = Request.objects.filter(user=q[0])
-    if (qr.count() > 1 and not resubmit ):
-        r = qr[0]
-        requestSubmitted = True
-    elif ((qr.count() > 1) and resubmit):
-        r = qr[0]
-        r.delete()
-        requestSubmitted = False
-    elif request.method == 'POST':
-        form = RequestForm(request.POST)
-        if (not form.is_valid()):
-            pass
-        else:
-            r = Request(user = q[0], message = request.POST["message"])
-            groupsToApply =  request.POST.getlist("apply_group")
-            message = "DN is " + userDN + "\n"
-            message += "email is " + request.POST["email"] + "\n"
-            message += "phone is " + request.POST["phone"] + "\n"
-            message += "I would like to apply for the following groups: " + ",".join(groupsToApply) + "\n"
-            message += request.POST["message"]
-            email.MailSender().send(message)
-            r.save()
-            requestSubmitted = True
-        
     userGroups = v.listGroups(userDN, shib.SLCS_CA)
-    
     nonUserGroups = []
     for g in groups:
         try:
@@ -82,6 +58,41 @@ def registration(request, resubmit=False):
             else:
                 nonUserGroups.append((g,g))
     nonUserGroups.sort(lambda a,b: cmp(a[0],b[0]))
+    
+    if request.method == 'POST':
+        form = RequestForm(request.POST)
+    else:
+        form = RequestForm(initial={"email": u.email, "message": "Please approve my request"})
+    
+    form.fields['groups'].choices = nonUserGroups
+    
+    requestSubmitted = False
+    qr = Request.objects.filter(user=q[0])
+    if (qr.count() > 1 and not resubmit ):
+        r = qr[0]
+        requestSubmitted = True
+    elif ((qr.count() > 1) and resubmit):
+        r = qr[0]
+        r.delete()
+        requestSubmitted = False
+    elif request.method == 'POST':
+        if (not form.is_valid()):
+            pass
+        else:
+            m = form.cleaned_data["message"]
+            groupsToApply = form.cleaned_data["groups"]
+            email = form.cleaned_data["email"]
+            phone = form.cleaned_data["phone"]
+            r = Request(user = q[0], message = m)
+            message = "DN is " + userDN + "\n"
+            message += "email is " + email + "\n"
+            message += "phone is " + phone + "\n"
+            message += "I would like to apply for the following groups: " + ",".join(groupsToApply) + "\n"
+            message += request.POST["message"]
+            regemail.MailSender().send(message)
+            r.save()
+            requestSubmitted = True
+        
     return render_to_response("reg.html", 
                               {"dn": a.cn, 
                                "groups": nonUserGroups, 

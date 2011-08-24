@@ -39,20 +39,26 @@ document.getElementById(link).style.display = "block";
   <p>You are currently not a member of any groups.</p>
  {% endif %}
 <form action="/registration/" method="post">
-<a id="showlink" href="javascript:display('show', 'group_selection','showlink')">Select Groups (Click to Expand)</a>
-<div id="group_selection" style="display:none;">
-<a href="javascript:display('hide', 'group_selection','showlink')">Select Groups (Hide)</a>
-<p>You can apply for the following groups:</p>
-<div class="form-field">
-<div style="overflow: auto; height: 300px; width: 600px">
-{% for g in groups %}
-	<input type="checkbox" name="apply_group" value="{{g.0}}" />
-	<label for="{{g.0}}">{{g.1}}</label>
-{% endfor %}
+{{ form.non_field_errors }}
+
+
+{{form.email.errors}}
+<label for="id_email">Email:</label>
+{{form.email}}
+{{form.phone.errors}}
+<label for="id_phone">Phone:</label>
+{{form.phone}}
+{{form.message.errors}}
+<label for="id_phone">Message To BeSTGRID Demiurges:</label>
+{{form.message}}
+{{form.groups.errors}}
+<p>
+<a id="expand_link" href="javascript:document.getElementById('groups').style.display = 'block';document.getElementById('expand_link').style.display = 'none';">Groups To Apply For (Click To Expand):</a>
+</p>
+<div id="groups" style="display: none;">
+<a href="javascript:document.getElementById('groups').style.display = 'none';document.getElementById('expand_link').style.display = 'block'">Groups To Apply For (Click To Hide):</a>
+{{form.groups}}
 </div>
-</div>
-</div>
-{{ form.as_p }}
 <input type="submit" value="Submit Membership Request" />
 </form>
 </p>
