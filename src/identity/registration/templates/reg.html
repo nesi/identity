@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+	{% extends "base.html" %}
 
 {% block head %}
 <script type="text/javascript">
@@ -26,14 +26,18 @@ document.getElementById(link).style.display = "block";
 <p>Welcome <b>{{dn}}</b>!</p>
 
 {% if requestSubmitted %}
-<p><font color='green'>Your request for group membership has been submitted. Click <a href="/resubmit/">here</a> to re-submit.</font></p>
+<p ><font color='green'>Your request for group membership has been submitted. Click <a href="/resubmit/">here</a> to re-submit.</font></p>
 {% else %}
-<p> You are a member of the following groups:
-<ul>
- {% for g in userGroups %}
-  <li>{{g}}</li>
- {% endfor %}
-</ul>
+ {% if userGroups %}
+  <p> You are a member of the following groups:
+  <ul>
+   {% for g in userGroups %}
+    <li>{{g}}</li>
+   {% endfor %}
+  </ul>
+ {% else %}
+ You are currently not a member of any groups.
+ {% endif %}
 <form action="/registration/" method="post">
 <a id="showlink" href="javascript:display('show', 'group_selection','showlink')">Select Groups (Click to Expand)</a>
 <div id="group_selection" style="display:none;">
