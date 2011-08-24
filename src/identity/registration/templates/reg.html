@@ -36,7 +36,7 @@ document.getElementById(link).style.display = "block";
    {% endfor %}
   </ul>
  {% else %}
- You are currently not a member of any groups.
+  <p>You are currently not a member of any groups.</p>
  {% endif %}
 <form action="/registration/" method="post">
 <a id="showlink" href="javascript:display('show', 'group_selection','showlink')">Select Groups (Click to Expand)</a>
