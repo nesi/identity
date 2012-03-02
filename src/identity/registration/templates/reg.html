@@ -5,18 +5,19 @@
 
 function display(action, id, link)
 {
-if (action == 'show')
-{
-document.getElementById(id).style.display = "block";
-document.getElementById(link).style.display = "none";
+  if (action == 'show')
+  {
+      document.getElementById(id).style.display = "block";
+      document.getElementById(link).style.display = "none";
+    }
+
+  if (action == 'hide')
+  {
+     document.getElementById(id).style.display = "none";
+     document.getElementById(link).style.display = "block";
+  }
 }
 
-if (action == 'hide')
-{
-document.getElementById(id).style.display = "none";
-document.getElementById(link).style.display = "block";
-}
-}
 
 </script>
 {% endblock %}
@@ -53,10 +54,10 @@ document.getElementById(link).style.display = "block";
 {{form.message}}
 {{form.groups.errors}}
 <p>
-<a id="expand_link" href="javascript:document.getElementById('groups').style.display = 'block';document.getElementById('expand_link').style.display = 'none';">Groups To Apply For (Click To Expand):</a>
+<a id="expand_link" href="" onclick="javascript:document.getElementById('groups').style.display = 'block';document.getElementById('expand_link').style.display = 'none';">Groups To Apply For (Click To Expand):</a>
 </p>
 <div id="groups" style="display: none;">
-<a href="javascript:document.getElementById('groups').style.display = 'none';document.getElementById('expand_link').style.display = 'block'">Groups To Apply For (Click To Hide):</a>
+<a href="" onclick="javascript:document.getElementById('groups').style.display = 'none';document.getElementById('expand_link').style.display = 'block'">Groups To Apply For (Click To Hide):</a>
 {{form.groups}}
 </div>
 <input type="submit" value="Submit Membership Request" />
