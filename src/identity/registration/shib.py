@@ -48,7 +48,6 @@ def shib2dn(acl, cn, token, idp):
             if (idp == entry[0]):
                 iDn = entry[1]
                 break
-''' hack for UoA IdP mapping '''
         if (idp.find("iam.auckland.ac.nz/idp") > -1):
             iDn = "/DC=nz/DC=org/DC=bestgrid/DC=slcs/O=The University of Auckland"
 
