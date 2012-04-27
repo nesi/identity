@@ -6,7 +6,7 @@ class NeSIUser(models.Model):
     username = models.CharField(max_length=100)
     token = models.CharField(max_length=30)
     provider = models.CharField(max_length=100)
-    email = models.CharField(max_length=30)
+    email = models.CharField(max_length=70)
     def qualifiedName(self):
         return self.username  + "@" + self.provider
     
