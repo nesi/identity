@@ -51,7 +51,7 @@ def registration(request, resubmit=False):
             userGroups.index(g)
         except ValueError:
             pq = Project.objects.filter(vo=g)
-            if ( not (g.startswith("/nz/uoa/") or (g.startswith("/nz/virtual-screening")))):
+            if ( not (g.startswith("/nz/uoa/") or (g.startswith("/nz/virtual-screening")) or (g.startswith("/nz/bestgrid")))):
                 continue
             if (pq.count() > 0):
                 nonUserGroups.append((g,pq[0].label))
