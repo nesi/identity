@@ -24,7 +24,6 @@ class RequestForm(forms.Form):
 def registration_resubmit(request):
     return registration(request, True)
 
-# Ideally this should be set as a model
 def institution_mapping(provider):
     
     mapping = {
@@ -117,7 +116,7 @@ We are happy to discuss and help improve your research workflow. Please let us k
         form = RequestForm(initial={"email": u.email, "message": msgstr})
     
     form.fields['groups'].choices = nonUserGroups
-    form.fields['groups'].initial = "/nz/uoa"
+    form.fields['groups'].initial = nonUserGroups
 
     requestSubmitted = False
     qr = Request.objects.filter(user=q[0])
