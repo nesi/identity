@@ -17,11 +17,26 @@ class RequestForm(forms.Form):
     error_css_class = 'error'
     email = forms.EmailField(required=True, widget = forms.TextInput(attrs={'size': 40}))
     phone = forms.CharField(required=True,  widget = forms.TextInput(attrs={'size': 40}))
-    message = forms.CharField(widget=forms.Textarea(attrs={'width': 150, 'height':50})  ,required=True)
+    message = forms.CharField(widget=forms.Textarea(attrs={'rows':10, 'cols':100})  ,required=True)
     groups = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple(), required=False)
+
     
 def registration_resubmit(request):
     return registration(request, True)
+
+# Ideally this should be set as a model
+def provider_to_vo(provider):
+    
+    dict = {
+            'http://iam.auckland.ac.nz/idp':'/nz/uoa',   
+            'https://idp.auckland.ac.nz/idp/shibboleth':'/nz/uoa',  
+            'https://idp.canterbury.ac.nz/idp/shibboleth':'/nz/bluefern',        
+            'https://idp.landcareresearch.co.nz/idp/shibboleth':'/nz/landcare',  
+            'https://idp.massey.ac.nz/idp/shibboleth':'', 
+            'https://idp.lincoln.ac.nz/idp/shibboleth:''
+            }
+
+    return dict[provider]
 
 def registration(request, resubmit=False):
     a = auth.getAuth(request)
@@ -51,7 +66,9 @@ def registration(request, resubmit=False):
             userGroups.index(g)
         except ValueError:
             pq = Project.objects.filter(vo=g)
-            if ( not (g.startswith("/nz/uoa/") or (g.startswith("/nz/virtual-screening")) or (g.startswith("/nz/bestgrid")))):
+            f = provider_to_vo(a.provider)
+            #if ( not (g.startswith("/nz/uoa/") or (g.startswith("/nz/virtual-screening")) or (g.startswith("/nz/bestgrid")))):
+            if ( not (g.startswith(f)) ) 
                 continue
             if (pq.count() > 0):
                 nonUserGroups.append((g,pq[0].label))
