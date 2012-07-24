@@ -114,7 +114,7 @@ We are happy to discuss and help improve your research workflow. Please let us k
         form = RequestForm(request.POST)
     else:
         form = RequestForm(initial={"email": u.email, "message": msgstr})
-        groups = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple(), choices=nonUserGroups, initial="/nz/nesi", required=False)
+        groups = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple(), choices=nonUserGroups, required=False)
         #choices={"groups":nonUserGroups},
         #groups = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple(), required=False, choices=)
     
