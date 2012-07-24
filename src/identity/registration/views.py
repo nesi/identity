@@ -113,10 +113,10 @@ We are happy to discuss and help improve your research workflow. Please let us k
     if request.method == 'POST':
         form = RequestForm(request.POST)
     else:
-        form = RequestForm(initial={"email": u.email, "message": msgstr})
+        form = RequestForm(initial={"email": u.email, "message": msgstr, "groups":"/nz/nesi"})
     
     form.fields['groups'].choices = nonUserGroups
-    form.fields['groups'].initial = nonUserGroups
+    #form.fields['groups'].initial = 
 
     requestSubmitted = False
     qr = Request.objects.filter(user=q[0])
