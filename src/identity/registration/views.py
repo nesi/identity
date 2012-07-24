@@ -87,8 +87,7 @@ def registration(request, resubmit=False):
                 nonUserGroups.append((g,g))
     #nonUserGroups.sort(lambda a,b: cmp(a[0],b[0]))
     nonUserGroups.sort(key=lambda tuple: tuple[1])
-    mesgstr = 
-"""
+    mesgstr = """
 Research aims: (brief abstract)
 
 Current environment: (number of cpu cores, memory and any other limiting factors)
