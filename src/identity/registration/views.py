@@ -39,6 +39,17 @@ def institution_mapping(provider):
 
     return mapping[provider]
 
+def in_default(group):
+
+    default = ['/nz/nesi']
+    for d in default:
+        if group.startswith(d):
+            return True
+            break
+
+    return False 
+
+
 def in_collaboration(group):
     
     collab = ['/nz/nesi', '/nz/virtual-screening']
@@ -47,7 +58,7 @@ def in_collaboration(group):
             return True
             break
 
-    return False
+    return False   
 
 def registration(request, resubmit=False):
     a = auth.getAuth(request)
@@ -72,6 +83,7 @@ def registration(request, resubmit=False):
     
     userGroups = v.listGroups(userDN, shib.SLCS_CA)
     nonUserGroups = []
+    defaultChoices = []
     for g in groups:
         try:
             userGroups.index(g)
@@ -79,10 +91,13 @@ def registration(request, resubmit=False):
             pq = Project.objects.filter(vo=g)
             inst = institution_mapping(a.provider)
             #if ( not (g.startswith("/nz/uoa/") or (g.startswith("/nz/virtual-screening")) or (g.startswith("/nz/bestgrid")))):
-            if ( not ( g.startswith(inst) or in_collaboration(g) ) ): 
+            if ( not ( g.startswith(inst) or (in_default(g)) or in_collaboration(g) ) ): 
                 continue
             if (pq.count() > 0):
                 nonUserGroups.append((g,pq[0].label))
+                if (g == inst or in_default(g)) {
+                    defaultChoices.append(len(nonUserGroups)-1)
+                }
             else:
                 nonUserGroups.append((g,g))
     #nonUserGroups.sort(lambda a,b: cmp(a[0],b[0]))
@@ -94,7 +109,7 @@ Current environment: (number of cpu cores, memory and any other limiting factors
 
 Requirements: (software, libraries, storage etc.)
 
-We are happy to discuss and help improve your research workflow. Please let us know if you need assistance in scaling your research to make use of our facilities."
+We are happy to discuss and help improve your research workflow. Please let us know if you need assistance in scaling your research to make use of our facilities.
 """
 
     if request.method == 'POST':
@@ -103,7 +118,8 @@ We are happy to discuss and help improve your research workflow. Please let us k
         form = RequestForm(initial={"email": u.email, "message": msgstr})
     
     form.fields['groups'].choices = nonUserGroups
-    
+    form.fields['groups'].initial = defaultChoices
+
     requestSubmitted = False
     qr = Request.objects.filter(user=q[0])
     if (qr.count() > 1 and not resubmit ):
