@@ -94,7 +94,7 @@ def registration(request, resubmit=False):
             if (pq.count() > 0):
                 nonUserGroups.append((g,pq[0].label))
                 if (g == inst or in_default(g)):
-                    defaultChoices.append(len(nonUserGroups)-1)
+                    defaultChoices.append(g)
             else:
                 nonUserGroups.append((g,g))
     #nonUserGroups.sort(lambda a,b: cmp(a[0],b[0]))
@@ -116,7 +116,7 @@ We are happy to discuss and help improve your research workflow. Please let us k
         form = RequestForm(initial={"email": u.email, "message": msgstr})
     
     form.fields['groups'].choices = nonUserGroups
-    form.fields['groups'].initial = (c[0] for c in nonUserGroups)
+    form.fields['groups'].initial = defaultChoices
 
     requestSubmitted = False
     qr = Request.objects.filter(user=q[0])
