@@ -33,8 +33,7 @@ def provider_to_vo(provider):
             'https://idp.canterbury.ac.nz/idp/shibboleth':'/nz/bluefern',        
             'https://idp.landcareresearch.co.nz/idp/shibboleth':'/nz/landcare',  
             'https://idp.massey.ac.nz/idp/shibboleth':'', 
-            'https://idp.lincoln.ac.nz/idp/shibboleth:''
-            }
+            'https://idp.lincoln.ac.nz/idp/shibboleth':''}
 
     return dict[provider]
 
