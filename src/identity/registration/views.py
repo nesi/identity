@@ -62,7 +62,7 @@ def registration(request, resubmit=False):
     if request.method == 'POST':
         form = RequestForm(request.POST)
     else:
-        form = RequestForm(initial={"email": u.email, "message": "Please approve my request"})
+        form = RequestForm(initial={"email": u.email, "message": "Research aims: (brief abstract)\n\nRequirements: (software, libraries, storage etc.)\n\nWe are happy to discuss and help improve your research workflow. Please let us know if you need assistance in scaling your research to make use of our facilities."})
     
     form.fields['groups'].choices = nonUserGroups
     
