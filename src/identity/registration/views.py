@@ -117,7 +117,7 @@ We are happy to discuss and help improve your research workflow. Please let us k
         form = RequestForm(initial={"email": u.email, "message": msgstr})
     
     form.fields['groups'].choices = nonUserGroups
-    form.fields['groups'].initial = [1]
+    form.fields['groups'].initial = 1
 
     requestSubmitted = False
     qr = Request.objects.filter(user=q[0])
