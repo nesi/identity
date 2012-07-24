@@ -95,9 +95,8 @@ def registration(request, resubmit=False):
                 continue
             if (pq.count() > 0):
                 nonUserGroups.append((g,pq[0].label))
-                if (g == inst or in_default(g)) {
+                if (g == inst or in_default(g)):
                     defaultChoices.append(len(nonUserGroups)-1)
-                }
             else:
                 nonUserGroups.append((g,g))
     #nonUserGroups.sort(lambda a,b: cmp(a[0],b[0]))
