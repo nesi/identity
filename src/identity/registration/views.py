@@ -85,7 +85,8 @@ def registration(request, resubmit=False):
                 nonUserGroups.append((g,pq[0].label))
             else:
                 nonUserGroups.append((g,g))
-    nonUserGroups.sort(lambda a,b: cmp(a[0],b[0]))
+    #nonUserGroups.sort(lambda a,b: cmp(a[0],b[0]))
+    nonUserGroups.sort(key=lambda tuple: tuple[1])
     
     if request.method == 'POST':
         form = RequestForm(request.POST)
