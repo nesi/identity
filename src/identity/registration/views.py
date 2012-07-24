@@ -67,7 +67,7 @@ def registration(request, resubmit=False):
             pq = Project.objects.filter(vo=g)
             f = provider_to_vo(a.provider)
             #if ( not (g.startswith("/nz/uoa/") or (g.startswith("/nz/virtual-screening")) or (g.startswith("/nz/bestgrid")))):
-            if ( not (g.startswith(f)) ) 
+            if ( not (g.startswith(f)) ): 
                 continue
             if (pq.count() > 0):
                 nonUserGroups.append((g,pq[0].label))
