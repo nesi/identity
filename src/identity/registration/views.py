@@ -87,11 +87,21 @@ def registration(request, resubmit=False):
                 nonUserGroups.append((g,g))
     #nonUserGroups.sort(lambda a,b: cmp(a[0],b[0]))
     nonUserGroups.sort(key=lambda tuple: tuple[1])
-    
+    mesgstr = 
+"""
+Research aims: (brief abstract)
+
+Current environment: (number of cpu cores, memory and any other limiting factors)
+
+Requirements: (software, libraries, storage etc.)
+
+We are happy to discuss and help improve your research workflow. Please let us know if you need assistance in scaling your research to make use of our facilities."
+"""
+
     if request.method == 'POST':
         form = RequestForm(request.POST)
     else:
-        form = RequestForm(initial={"email": u.email, "message": "Research aims: (brief abstract)\n\nRequirements: (software, libraries, storage etc.)\n\nWe are happy to discuss and help improve your research workflow. Please let us know if you need assistance in scaling your research to make use of our facilities."})
+        form = RequestForm(initial={"email": u.email, "message": msgstr})
     
     form.fields['groups'].choices = nonUserGroups
     
