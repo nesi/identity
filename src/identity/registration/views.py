@@ -27,7 +27,7 @@ def registration_resubmit(request):
 # Ideally this should be set as a model
 def provider_to_vo(provider):
     
-    dict = {
+    mapping = {
             'http://iam.auckland.ac.nz/idp':'/nz/uoa',   
             'https://idp.auckland.ac.nz/idp/shibboleth':'/nz/uoa',  
             'https://idp.canterbury.ac.nz/idp/shibboleth':'/nz/bluefern',        
@@ -35,7 +35,7 @@ def provider_to_vo(provider):
             'https://idp.massey.ac.nz/idp/shibboleth':'', 
             'https://idp.lincoln.ac.nz/idp/shibboleth':''}
 
-    return dict[provider]
+    return mapping[provider]
 
 def registration(request, resubmit=False):
     a = auth.getAuth(request)
