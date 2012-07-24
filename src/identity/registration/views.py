@@ -25,7 +25,7 @@ def registration_resubmit(request):
     return registration(request, True)
 
 # Ideally this should be set as a model
-def provider_to_vo(provider):
+def institution_mapping(provider):
     
     mapping = {
             'http://iam.test.auckland.ac.nz/idp':'/nz/uoa',
@@ -38,6 +38,16 @@ def provider_to_vo(provider):
             }
 
     return mapping[provider]
+
+def in_collaboration(group):
+    
+    collab = ['/nz/nesi', '/nz/virtual-screening']
+    for c in collab:
+        if group.startswith(c):
+            return True
+            break
+
+    return False
 
 def registration(request, resubmit=False):
     a = auth.getAuth(request)
@@ -67,9 +77,9 @@ def registration(request, resubmit=False):
             userGroups.index(g)
         except ValueError:
             pq = Project.objects.filter(vo=g)
-            f = provider_to_vo(a.provider)
+            inst = provider_to_vo(a.provider)
             #if ( not (g.startswith("/nz/uoa/") or (g.startswith("/nz/virtual-screening")) or (g.startswith("/nz/bestgrid")))):
-            if ( not (g.startswith(f)) ): 
+            if ( not ( g.startswith(inst) or in_collaboration(g) ) ): 
                 continue
             if (pq.count() > 0):
                 nonUserGroups.append((g,pq[0].label))
