@@ -28,12 +28,14 @@ def registration_resubmit(request):
 def provider_to_vo(provider):
     
     mapping = {
+            'http://iam.test.auckland.ac.nz/idp':'/nz/uoa',
             'http://iam.auckland.ac.nz/idp':'/nz/uoa',   
             'https://idp.auckland.ac.nz/idp/shibboleth':'/nz/uoa',  
             'https://idp.canterbury.ac.nz/idp/shibboleth':'/nz/bluefern',        
             'https://idp.landcareresearch.co.nz/idp/shibboleth':'/nz/landcare',  
             'https://idp.massey.ac.nz/idp/shibboleth':'', 
-            'https://idp.lincoln.ac.nz/idp/shibboleth':''}
+            'https://idp.lincoln.ac.nz/idp/shibboleth':''
+            }
 
     return mapping[provider]
 
