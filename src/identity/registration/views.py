@@ -17,7 +17,7 @@ class RequestForm(forms.Form):
     error_css_class = 'error'
     email = forms.EmailField(required=True, widget = forms.TextInput(attrs={'size': 40}))
     phone = forms.CharField(required=True,  widget = forms.TextInput(attrs={'size': 40}))
-    message = forms.CharField(widget=forms.Textarea  ,required=True)
+    message = forms.CharField(widget=forms.Textarea(attrs={'width': 150, 'height':50})  ,required=True)
     groups = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple(), required=False)
     
 def registration_resubmit(request):
