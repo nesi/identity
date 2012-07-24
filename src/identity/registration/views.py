@@ -18,7 +18,7 @@ class RequestForm(forms.Form):
     email = forms.EmailField(required=True, widget = forms.TextInput(attrs={'size': 40}))
     phone = forms.CharField(required=True,  widget = forms.TextInput(attrs={'size': 40}))
     message = forms.CharField(widget=forms.Textarea(attrs={'rows':10, 'cols':100})  ,required=True)
-    groups = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple(), required=False)
+    #groups = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple(), required=False)
     
 def registration_resubmit(request):
     return registration(request, True)
@@ -113,7 +113,9 @@ We are happy to discuss and help improve your research workflow. Please let us k
     if request.method == 'POST':
         form = RequestForm(request.POST)
     else:
-        form = RequestForm(choices={"groups":nonUserGroups}, initial={"email": u.email, "message": msgstr}, )
+        form = RequestForm(initial={"email": u.email, "message": msgstr})
+        groups = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple(), choices=nonUserGroups, required=False)
+        #choices={"groups":nonUserGroups},
         #groups = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple(), required=False, choices=)
     
     #form.fields['groups'].choices = nonUserGroups
