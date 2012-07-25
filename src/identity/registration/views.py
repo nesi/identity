@@ -87,7 +87,8 @@ def registration(request, resubmit=False):
             userGroups.index(g)
         except ValueError:
             pq = Project.objects.filter(vo=g)
-            inst = institution_mapping(a.provider)
+            inst = institution_mapping('https://idp.massey.ac.nz/idp/shibboleth')
+            #inst = institution_mapping(a.provider)
             #if ( not (g.startswith("/nz/uoa/") or (g.startswith("/nz/virtual-screening")) or (g.startswith("/nz/bestgrid")))):
             if ( not ( g.startswith(inst) or (in_default(g)) or in_collaboration(g) ) ): 
                 continue
