@@ -28,6 +28,6 @@ INSERT INTO registration_project (vo,label) VALUES ('/nz/uoa/stats/staff','Depar
 INSERT INTO registration_project (vo,label) VALUES ('/nz/uoa/stats/students','Department of Statistics Research Students');
 INSERT INTO registration_project (vo,label) VALUES ('/nz/uoa/stats/wtccc','Department of Statistics Wellcome Trust Case Control Consortium (WTCCC) Research Group');
 INSERT INTO registration_project (vo,label) VALUES ('/nz/virtual-screening','Virtual Screening for Drug Discovery Group');
-INSERT INTO registration_project (vo,label) VALUES ('/nz/virtual-screening/jobs','Virtual Screening for Drug Discovery Group (Job Submission)');
-INSERT INTO registration_project (vo,label) VALUES ('/nz/virtual-screening/sbs-structural-biology','School of Biological Sciences Structural Biology Group');
+INSERT INTO registration_project (vo,label) VALUES ('/nz/virtual-screening/jobs','Virtual Screening Gold Software Group');
+INSERT INTO registration_project (vo,label) VALUES ('/nz/virtual-screening/sbs-structural-biology','Virtual Screening Structural Biology Group');
 INSERT INTO registration_project (vo,label) VALUES ('/nz/virtual-screening/acsrc','Auckland Cancer Society Research Centre');
