@@ -31,8 +31,8 @@ def institution_mapping(provider):
             'https://idp.auckland.ac.nz/idp/shibboleth':'/nz/uoa',  
             'https://idp.canterbury.ac.nz/idp/shibboleth':'/nz/bluefern',        
             'https://idp.landcareresearch.co.nz/idp/shibboleth':'/nz/landcare',  
-            'https://idp.massey.ac.nz/idp/shibboleth':'', 
-            'https://idp.lincoln.ac.nz/idp/shibboleth':''
+            'https://idp.massey.ac.nz/idp/shibboleth':'/nz/massey', 
+            'https://idp.lincoln.ac.nz/idp/shibboleth':'/nz/lincoln'
             }
 
     return mapping[provider]
