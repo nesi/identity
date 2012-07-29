@@ -8,6 +8,7 @@ INSERT INTO registration_project (vo,label) VALUES ('/nz/landcare','Landcare Res
 INSERT INTO registration_project (vo,label) VALUES ('/nz/landcare/admin','Landcare Research Administrators');
 INSERT INTO registration_project (vo,label) VALUES ('/nz/landcare/osgeo','Landcare Research OSGeo');
 INSERT INTO registration_project (vo,label) VALUES ('/nz/nesi','New Zealand eScience Infrastructure');
+INSERT INTO registration_project (vo,label) VALUES ('/nz/uoa/abi','Auckland Bioengineering Institute');
 INSERT INTO registration_project (vo,label) VALUES ('/nz/uoa','The University of Auckland');
 INSERT INTO registration_project (vo,label) VALUES ('/nz/uoa/civil-engineering','Department of Civil Engineering');
 INSERT INTO registration_project (vo,label) VALUES ('/nz/uoa/mechanical-engineering','Department of Mechanical Engineering');
@@ -18,6 +19,7 @@ INSERT INTO registration_project (vo,label) VALUES ('/nz/uoa/comp-evol','Computa
 INSERT INTO registration_project (vo,label) VALUES ('/nz/uoa/comp-sci','Department of Computer Science');
 INSERT INTO registration_project (vo,label) VALUES ('/nz/uoa/comp-sci/research','Department of Computer Science Research Programmers');
 INSERT INTO registration_project (vo,label) VALUES ('/nz/uoa/engineering-science','Department of Engineering Science');
+INSERT INTO registration_project (vo,label) VALUES ('/nz/uoa/engineering-science/geothermal','Department of Engineering Science Geothermal Research Group');
 INSERT INTO registration_project (vo,label) VALUES ('/nz/uoa/epigen','Developmental Epigenetics, The Liggins Institute');
 INSERT INTO registration_project (vo,label) VALUES ('/nz/uoa/math','Department of Mathematics');
 INSERT INTO registration_project (vo,label) VALUES ('/nz/uoa/mnl','Movement Neuroscience Laboratory');
