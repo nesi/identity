@@ -100,6 +100,8 @@ def registration(request, resubmit=False):
     #nonUserGroups.sort(lambda a,b: cmp(a[0],b[0]))
     nonUserGroups.sort(key=lambda tuple: tuple[1])
     msgstr = """
+NeSI project ID (if any):
+
 Research aims: (brief abstract)
 
 Current environment: (number of cpu cores, memory and any other limiting factors)
