@@ -25,6 +25,8 @@ def registration_resubmit(request):
 
 def institution_mapping(provider):
     
+    provider = 'https://virtualhome.tuakiri.ac.nz/idp/shibboleth'
+
     mapping = {
             'http://iam.test.auckland.ac.nz/idp':'/nz/uoa',
             'http://iam.auckland.ac.nz/idp':'/nz/uoa',   
@@ -35,7 +37,10 @@ def institution_mapping(provider):
             'https://idp.lincoln.ac.nz/idp/shibboleth':'/nz/lincoln'
             }
 
-    return mapping[provider]
+    if provider in mapping:
+        return mapping[provider]
+    else
+        return '/nz/nesi'
 
 def in_default(group):
 
