@@ -25,8 +25,6 @@ def registration_resubmit(request):
 
 def institution_mapping(provider):
     
-    provider = 'https://virtualhome.tuakiri.ac.nz/idp/shibboleth'
-
     mapping = {
             'http://iam.test.auckland.ac.nz/idp':'/nz/uoa',
             'http://iam.auckland.ac.nz/idp':'/nz/uoa',   
