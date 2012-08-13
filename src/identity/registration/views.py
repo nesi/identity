@@ -39,7 +39,7 @@ def institution_mapping(provider):
 
     if provider in mapping:
         return mapping[provider]
-    else
+    else:
         return '/nz/nesi'
 
 def in_default(group):
