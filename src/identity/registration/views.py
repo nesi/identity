@@ -53,7 +53,7 @@ def in_default(group):
 
 def in_collaboration(group):
     
-    collab = ['/nz/nesi', '/nz/virtual-screening']
+    collab = ['/nz/nesi', '/nz/bestgrid', '/nz/virtual-screening']
     for c in collab:
         if group.startswith(c):
             return True

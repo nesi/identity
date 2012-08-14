@@ -1,6 +1,6 @@
 DELETE FROM registration_project;
 ALTER TABLE registration_project AUTO_INCREMENT = 0;
-INSERT INTO registration_project (vo,label) VALUES ('/nz/bestgrid','BeSTGRID');
+INSERT INTO registration_project (vo,label) VALUES ('/nz/bestgrid','NeSI transitional services (formerly BeSTGRID)');
 INSERT INTO registration_project (vo,label) VALUES ('/nz/bluefern','BlueFern');
 INSERT INTO registration_project (vo,label) VALUES ('/nz/demo','Demonstration');
 INSERT INTO registration_project (vo,label) VALUES ('/nz/grid-dev','New Zealand Grid Development');
