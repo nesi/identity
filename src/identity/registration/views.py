@@ -64,7 +64,7 @@ def in_collaboration(group):
 def registration(request, resubmit=False):
     a = auth.getAuth(request)
     form = RequestForm()
-    if (a.cn == None or a.provider == None or a.token == None):
+    if (a.username ==None or a.cn == None or a.provider == None or a.token == None):
         return HttpResponse(status=403)
     
     v = VomsConnector()
