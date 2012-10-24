@@ -36,3 +36,4 @@ INSERT INTO registration_project (vo,label) VALUES ('/nz/virtual-screening','Vir
 INSERT INTO registration_project (vo,label) VALUES ('/nz/virtual-screening/jobs','Virtual Screening Gold Software Group');
 INSERT INTO registration_project (vo,label) VALUES ('/nz/virtual-screening/sbs-structural-biology','Virtual Screening Structural Biology Group');
 INSERT INTO registration_project (vo,label) VALUES ('/nz/virtual-screening/acsrc','Auckland Cancer Society Research Centre');
+INSERT INTO registration_project (vo,label) VALUES ('/nz/uoo','The University of Otago');
