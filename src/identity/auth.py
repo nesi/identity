@@ -14,6 +14,7 @@ class ShibAuth(object):
         self.cn = request.META["cn"]
         self.username = request.META["REMOTE_USER"]
         self.email = request.META["mail"]
+            
 
 
 class Auth2(object):

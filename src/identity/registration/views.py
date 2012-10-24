@@ -62,9 +62,12 @@ def in_collaboration(group):
     return False   
 
 def registration(request, resubmit=False):
-    a = auth.getAuth(request)
+    try:
+        a = auth.getAuth(request)
+    except KeyError:
+        return HttpResponse(status=403)
     form = RequestForm()
-    if (a.cn == None or a.provider == None or a.token == None):
+    if (a.username ==None or a.cn == None or a.provider == None or a.token == None):
         return HttpResponse(status=403)
     
     v = VomsConnector()
