@@ -23,7 +23,30 @@ class RequestForm(forms.Form):
 def registration_resubmit(request):
     return registration(request, True)
 
+# Maps the IDP to the VOMS group
 def institution_mapping(provider):
+
+	# CRIs:
+	#
+	# AgResearch: /nz/agresearch
+	# ESR: /nz/esr
+	# IRL: /nz/irl
+	# Plant and Food: /nz/pfr
+	# NIWA: /nz/niwa
+	# GNS: /nz/gns
+	# Scion: /nz/scion
+	# Landcare: /nz/landare
+	#
+	# Universities:
+	#
+	# Auckland: /nz/uoa
+	# Massey: /nz/massey
+	# UC: /nz/bluefern
+	# VUW: /nz/vuw
+	# Otago: /nz/uoo
+	# Waikato: /nz/waikato
+	# Lincoln: /nz/lincoln 
+	# AUT: /nz/aut
     
     mapping = {
             'http://iam.test.auckland.ac.nz/idp':'/nz/uoa',
@@ -40,11 +63,13 @@ def institution_mapping(provider):
     else:
         return '/nz/nesi'
 
+# Selected (checked) by default
 def in_default(group):
 
     default = ['/nz/nesi']
     for d in default:
-        if group.startswith(d):
+        #if group.startswith(d):
+        if group == d :
             return True
             break
 
@@ -53,7 +78,7 @@ def in_default(group):
 
 def in_collaboration(group):
     
-    collab = ['/nz/nesi', '/nz/bestgrid', '/nz/virtual-screening', '/nz/uoo']
+    collab = ['/nz/nesi', '/nz/bestgrid', '/nz/virtual-screening', '/nz/uoo', '/nz/agresearch', '/nz/esr', '/nz/irl', '/nz/pfr', '/nz/niwa', '/nz/gns', '/nz/scion', '/nz/landcare', '/nz/uoa', '/nz/massey', '/nz/bluefern', '/nz/bluefern', '/nz/vuw', '/nz/uoo', '/nz/waikato', '/nz/linclon', '/nz/aut']
     for c in collab:
         if group.startswith(c):
             return True
