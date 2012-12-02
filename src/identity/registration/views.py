@@ -79,7 +79,7 @@ def ignore(group):
 	
 	ignore_list = ['/nz/nesi/projects', '/nz/uoa/test', '/nz/uoa/admin']
 	for i in ignore_list:
-		if group.startswith(i)
+		if group.startswith(i):
 			return True
 			break
 
