@@ -128,7 +128,7 @@ def registration(request, resubmit=False):
         except ValueError:
             pq = Project.objects.filter(vo=g)
             inst = institution_mapping(a.provider)
-            if ( in_ignore(g) or ( not ( g.startswith(inst) or (in_default(g)) or in_collaboration(g) ) ): 
+            if ( in_ignore(g) or not ( g.startswith(inst) or (in_default(g)) or in_collaboration(g) ) ): 
                 continue
             if (pq.count() > 0):
                 nonUserGroups.append((g,pq[0].label))
