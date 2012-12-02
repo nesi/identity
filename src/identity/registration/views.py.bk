@@ -119,7 +119,8 @@ def registration(request, resubmit=False):
         except ValueError:
             pq = Project.objects.filter(vo=g)
             inst = institution_mapping(a.provider)
-            if ( g.startswith("/nz/nesi/projects") or  not ( g.startswith(inst) or (in_default(g)) or in_collaboration(g) ) ): 
+            #if ( not (g.startswith("/nz/uoa/") or (g.startswith("/nz/virtual-screening")) or (g.startswith("/nz/bestgrid")))):
+            if ( not ( g.startswith(inst) or (in_default(g)) or in_collaboration(g) ) ): 
                 continue
             if (pq.count() > 0):
                 nonUserGroups.append((g,pq[0].label))
@@ -129,7 +130,19 @@ def registration(request, resubmit=False):
                 nonUserGroups.append((g,g))
     #nonUserGroups.sort(lambda a,b: cmp(a[0],b[0]))
     nonUserGroups.sort(key=lambda tuple: tuple[1])
-    msgstr = ""
+    msgstr = """
+NeSI project ID (if any):
+
+Research aims: (brief abstract)
+
+Current environment: (number of cpu cores, memory and any other limiting factors)
+
+Requirements: (software, libraries, storage etc.)
+
+We are happy to discuss and help improve your research workflow. Please let us know if you need assistance in scaling your research to make use of our facilities.
+"""
+
+
     if request.method == 'POST':
         form = RequestForm(request.POST)
     else:
