@@ -13,7 +13,12 @@ class ShibAuth(object):
         self.provider = request.META["Shib-Identity-Provider"]
         self.cn = request.META["cn"]
         self.username = request.META["REMOTE_USER"]
-        self.email = request.META["mail"]
+        try:
+            self.email = request.META["mail"]
+        except KeyError:
+            # don't need email
+            self.email = ""
+            pass
             
 
 
