@@ -24,10 +24,13 @@ class MailSender(object):
 
     def __init__(self):
         pass
-    
+
     def send(self, message):
+        send(self,message,"identity@auckland.ac.nz")
+
+    def send(self,message,addr):
         msg = MIMEText(message)
-        me = "identity@auckland.ac.nz"
+        me = addr
         you = "eresearch@nesi.org.nz"
         msg["Subject"] = "Application for VO Membership"
         msg["To"] =  you

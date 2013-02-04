@@ -165,13 +165,13 @@ def registration(request, resubmit=False):
             email = form.cleaned_data["email"]
             phone = form.cleaned_data["phone"]
             r = Request(user = q[0], message = m)
-            message = "#assignee g.soudlenkov@auckland.ac.nz\n"
-            message += "DN is " + userDN + "\n"
+#            message = "#assignee g.soudlenkov@auckland.ac.nz\n"
+            message = "DN is " + userDN + "\n"
             message += "email is " + email + "\n"
             message += "phone is " + phone + "\n"
             message += "I would like to apply for the following groups: " + ",".join(groupsToApply) + "\n"
             message += request.POST["message"]
-            regemail.MailSender().send(message)
+            regemail.MailSender().send(message,email)
             r.save()
             requestSubmitted = True
         
