@@ -27,7 +27,7 @@ class MailSender(object):
     
     def send(self, message):
         msg = MIMEText(message)
-        me = "identity@auckland.ac.nz"
+        me = "y.halytskyy@auckland.ac.nz"
         you = "eresearch@nesi.org.nz"
         msg["Subject"] = "Application for VO Membership"
         msg["To"] =  you
