@@ -165,7 +165,7 @@ def registration(request, resubmit=False):
             email = form.cleaned_data["email"]
             phone = form.cleaned_data["phone"]
             r = Request(user = q[0], message = m)
-            message = "#assignee g.soudlenkov@auckland.ac.nz"
+            message = "#assignee g.soudlenkov@auckland.ac.nz\n"
             message += "DN is " + userDN + "\n"
             message += "email is " + email + "\n"
             message += "phone is " + phone + "\n"
